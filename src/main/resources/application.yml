@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: Shop_store_module
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASS}
+  jpa:
+    generate-ddl: true
+    open-in-view: false
+
+  kafka:
+    bootstrap-servers: ${KAFKA_URL}
+    consumer:
+      group-id: ${SAVER_GROUP_ID}
+
+  cache:
+    type: redis
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
