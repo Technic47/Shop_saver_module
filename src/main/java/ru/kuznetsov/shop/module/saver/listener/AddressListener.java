@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 import ru.kuznetsov.shop.data.dto.AddressDto;
 import ru.kuznetsov.shop.data.service.AddressService;
 
+import static ru.kuznetsov.shop.data.common.KafkaTopics.ADDRESS_SAVE_TOPIC;
+
 @Component
 @RequiredArgsConstructor
 public class AddressListener {
-
-    private final static String ADDRESS_SAVE_TOPIC = "shop_save_address";
 
     private final AddressService addressService;
 

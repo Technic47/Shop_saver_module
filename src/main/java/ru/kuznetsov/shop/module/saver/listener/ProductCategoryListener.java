@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 import ru.kuznetsov.shop.data.dto.ProductCategoryDto;
 import ru.kuznetsov.shop.data.service.ProductCategoryService;
 
+import static ru.kuznetsov.shop.data.common.KafkaTopics.PRODUCT_CATEGORY_SAVE_TOPIC;
+
 @Component
 @RequiredArgsConstructor
 public class ProductCategoryListener {
-
-    private final static String PRODUCT_CATEGORY_SAVE_TOPIC = "shop_save_product_category";
 
     private final ProductCategoryService productCategoryService;
 
