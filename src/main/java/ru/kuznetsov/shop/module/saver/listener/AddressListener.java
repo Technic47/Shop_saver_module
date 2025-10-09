@@ -18,7 +18,7 @@ public class AddressListener {
 
     Logger logger = LoggerFactory.getLogger(AddressListener.class);
 
-    @KafkaListener(topics = ADDRESS_SAVE_TOPIC, groupId = "${spring.kafka.consumer.groupId}")
+    @KafkaListener(topics = ADDRESS_SAVE_TOPIC, groupId = "${spring.kafka.consumer.group-id}")
     public void saveProduct(AddressDto addressDto) {
         logger.info("Saving address {}", addressDto);
         addressService.add(addressDto);

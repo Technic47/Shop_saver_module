@@ -1,6 +1,6 @@
 spring:
   application:
-    name: Shop_store_module
+    name: Shop_saver_module
 
   datasource:
     driver-class-name: org.postgresql.Driver

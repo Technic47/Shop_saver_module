@@ -18,7 +18,7 @@ public class StoreListener {
 
     Logger logger = LoggerFactory.getLogger(StoreListener.class);
 
-    @KafkaListener(topics = STORE_SAVE_TOPIC, groupId = "${spring.kafka.consumer.groupId}")
+    @KafkaListener(topics = STORE_SAVE_TOPIC, groupId = "${spring.kafka.consumer.group-id}")
     public void saveProduct(StoreDto storeDto) {
         logger.info("Saving store {}", storeDto);
         storeService.add(storeDto);
