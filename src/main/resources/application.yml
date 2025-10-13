@@ -14,7 +14,7 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_URL}
     consumer:
-      group-id: ${SAVER_GROUP_ID}
+      group-id: ${MODULE_GROUP_ID}
 
   cache:
     type: redis

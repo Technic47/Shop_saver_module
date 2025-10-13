@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  saver_module:
+    env_file:
+      - "../.env"
+    build:
+      context: .
+    container_name: saver_module
+    restart: always
+    environment:
+      MODULE_GROUP_ID: STOCK_GROUP_ID
+#    deploy:
+#      mode: replicated
+#      replicas: 2
+
