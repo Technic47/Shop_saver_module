@@ -9,7 +9,7 @@ services:
     container_name: saver_module
     restart: always
     environment:
-      MODULE_GROUP_ID: STOCK_GROUP_ID
+      MODULE_GROUP_ID: SAVER_GROUP_ID
 #    deploy:
 #      mode: replicated
 #      replicas: 2
