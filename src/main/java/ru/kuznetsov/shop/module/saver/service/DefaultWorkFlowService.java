@@ -24,7 +24,9 @@ public class DefaultWorkFlowService {
             byte[] operationId,
             Logger logger,
             S service,
-            Class<T> dtoClass) {
+            Class<T> dtoClass,
+            String successfulTopic,
+            String failTopic) {
 
         String operationIdEncoded = new String(operationId);
         String dtoName = dtoClass.getSimpleName().toLowerCase().replace("dto", "");
@@ -34,13 +36,13 @@ public class DefaultWorkFlowService {
         try {
             T saved = (T) service.add(objectMapper.readValue(itemJson, dtoClass));
             kafkaService.sendMessageWithEntity(saved,
-                    PRODUCT_SAVE_SUCCESSFUL_TOPIC,
+                    successfulTopic,
                     Collections.singletonMap(OPERATION_ID_HEADER, operationId));
 
             logger.info("Item {} saved. Id: {}, operationId: {}", dtoName, saved.getId(), operationIdEncoded);
         } catch (Exception e) {
             kafkaService.sendMessage(itemJson,
-                    PRODUCT_SAVE_FAIL_TOPIC,
+                    failTopic,
                     Collections.singletonMap(OPERATION_ID_HEADER, operationId));
 
             logger.error("Item {} saving failed. Product: {}, operationId: {}", dtoName, itemJson, operationIdEncoded);

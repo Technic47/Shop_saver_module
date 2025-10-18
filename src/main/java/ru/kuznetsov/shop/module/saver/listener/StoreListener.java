@@ -8,10 +8,9 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 import ru.kuznetsov.shop.data.service.StoreService;
 import ru.kuznetsov.shop.module.saver.service.DefaultWorkFlowService;
-import ru.kuznetsov.shop.represent.dto.ProductDto;
+import ru.kuznetsov.shop.represent.dto.StoreDto;
 
-import static ru.kuznetsov.shop.represent.common.KafkaConst.OPERATION_ID_HEADER;
-import static ru.kuznetsov.shop.represent.common.KafkaConst.STORE_SAVE_TOPIC;
+import static ru.kuznetsov.shop.represent.common.KafkaConst.*;
 
 @Component
 @RequiredArgsConstructor
@@ -30,6 +29,8 @@ public class StoreListener {
                 operationId,
                 logger,
                 storeService,
-                ProductDto.class);
+                StoreDto.class,
+                STORE_SAVE_SUCCESSFUL_TOPIC,
+                STORE_SAVE_FAIL_TOPIC);
     }
 }

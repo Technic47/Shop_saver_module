@@ -8,10 +8,9 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 import ru.kuznetsov.shop.data.service.AddressService;
 import ru.kuznetsov.shop.module.saver.service.DefaultWorkFlowService;
-import ru.kuznetsov.shop.represent.dto.ProductDto;
+import ru.kuznetsov.shop.represent.dto.AddressDto;
 
-import static ru.kuznetsov.shop.represent.common.KafkaConst.ADDRESS_SAVE_TOPIC;
-import static ru.kuznetsov.shop.represent.common.KafkaConst.OPERATION_ID_HEADER;
+import static ru.kuznetsov.shop.represent.common.KafkaConst.*;
 
 @Component
 @RequiredArgsConstructor
@@ -30,6 +29,8 @@ public class AddressListener {
                 operationId,
                 logger,
                 addressService,
-                ProductDto.class);
+                AddressDto.class,
+                ADDRESS_SAVE_SUCCESSFUL_TOPIC,
+                ADDRESS_SAVE_FAIL_TOPIC);
     }
 }

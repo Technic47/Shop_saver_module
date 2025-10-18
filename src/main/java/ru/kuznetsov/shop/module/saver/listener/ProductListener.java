@@ -10,8 +10,7 @@ import ru.kuznetsov.shop.data.service.ProductService;
 import ru.kuznetsov.shop.module.saver.service.DefaultWorkFlowService;
 import ru.kuznetsov.shop.represent.dto.ProductDto;
 
-import static ru.kuznetsov.shop.represent.common.KafkaConst.OPERATION_ID_HEADER;
-import static ru.kuznetsov.shop.represent.common.KafkaConst.PRODUCT_SAVE_TOPIC;
+import static ru.kuznetsov.shop.represent.common.KafkaConst.*;
 
 @Component
 @RequiredArgsConstructor
@@ -30,6 +29,8 @@ public class ProductListener {
                 operationId,
                 logger,
                 productService,
-                ProductDto.class);
+                ProductDto.class,
+                PRODUCT_SAVE_SUCCESSFUL_TOPIC,
+                PRODUCT_SAVE_FAIL_TOPIC);
     }
 }
