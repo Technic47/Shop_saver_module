@@ -10,7 +10,7 @@ import ru.kuznetsov.shop.represent.dto.AbstractDto;
 
 import java.util.Collections;
 
-import static ru.kuznetsov.shop.data.common.KafkaConst.*;
+import static ru.kuznetsov.shop.represent.common.KafkaConst.*;
 
 @Service
 @RequiredArgsConstructor

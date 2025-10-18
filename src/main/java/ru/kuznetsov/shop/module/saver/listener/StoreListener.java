@@ -10,8 +10,8 @@ import ru.kuznetsov.shop.data.service.StoreService;
 import ru.kuznetsov.shop.module.saver.service.DefaultWorkFlowService;
 import ru.kuznetsov.shop.represent.dto.ProductDto;
 
-import static ru.kuznetsov.shop.data.common.KafkaConst.OPERATION_ID_HEADER;
-import static ru.kuznetsov.shop.data.common.KafkaConst.STORE_SAVE_TOPIC;
+import static ru.kuznetsov.shop.represent.common.KafkaConst.OPERATION_ID_HEADER;
+import static ru.kuznetsov.shop.represent.common.KafkaConst.STORE_SAVE_TOPIC;
 
 @Component
 @RequiredArgsConstructor
