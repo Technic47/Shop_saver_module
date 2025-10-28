@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://host.docker.internal:5432/shop_test
+    username: postgres
+    password: 1999
+  jpa:
+    generate-ddl: true
+    open-in-view: false
+
+  kafka:
+    bootstrap-servers: host.docker.internal:9092
+    consumer:
+      auto-offset-reset: earliest
+      group-id: test
+
+  cache:
+    type: redis
+
+  data:
+    redis:
+      host: host.docker.internal
+      port: 6379
