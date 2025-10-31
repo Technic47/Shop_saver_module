@@ -12,7 +12,7 @@ import ru.kuznetsov.shop.represent.dto.AbstractDto;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collections;
 
-import static ru.kuznetsov.shop.represent.common.KafkaConst.*;
+import static ru.kuznetsov.shop.represent.common.KafkaConst.OPERATION_ID_HEADER;
 
 @Service
 @RequiredArgsConstructor
@@ -54,8 +54,7 @@ public class ListenerService {
                     failTopic,
                     Collections.singletonMap(OPERATION_ID_HEADER, operationId));
 
-            logger.error("Item {} saving failed. Product: {}, operationId: {}", dtoName, itemJson, operationIdEncoded);
-            logger.error("Item {} saving failed.", dtoName, e);
+            logger.error("Item saving failed. OperationId: {}, {}: {}, ", operationIdEncoded, dtoName, itemJson);
         }
     }
 }
