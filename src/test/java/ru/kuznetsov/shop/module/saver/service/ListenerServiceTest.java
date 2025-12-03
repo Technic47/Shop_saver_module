@@ -6,8 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -49,18 +47,18 @@ class ListenerServiceTest {
 
         doReturn(new ProductDto())
                 .when(productService)
-                        .add(any());
+                .add(any());
         doReturn(true)
                 .when(kafkaService)
-                        .sendMessageWithEntity(any(ProductDto.class), eq(SUCCESSFUL_TOPIC), any(Map.class));
+                .sendMessageWithEntity(any(ProductDto.class), eq(SUCCESSFUL_TOPIC), any(Map.class));
 
         listenerService.save(
                 mockJson,
                 UUID.randomUUID().toString().getBytes(),
                 productService,
                 SUCCESSFUL_TOPIC,
-                "fail"
-                );
+                "fail",
+                mockDto.getClass());
 
         verify(productService, times(1)).add(any());
         verify(kafkaService, times(1)).sendMessageWithEntity(any(ProductDto.class), eq(SUCCESSFUL_TOPIC), any(Map.class));
@@ -84,7 +82,8 @@ class ListenerServiceTest {
                 UUID.randomUUID().toString().getBytes(),
                 productService,
                 SUCCESSFUL_TOPIC,
-                "fail"
+                "fail",
+                mockDto.getClass()
         );
 
         verify(productService, times(1)).add(any());

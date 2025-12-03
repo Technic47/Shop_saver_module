@@ -9,7 +9,6 @@ import ru.kuznetsov.shop.data.service.AbstractService;
 import ru.kuznetsov.shop.data.service.KafkaService;
 import ru.kuznetsov.shop.represent.dto.AbstractDto;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.Collections;
 
 import static ru.kuznetsov.shop.represent.common.KafkaConst.OPERATION_ID_HEADER;
@@ -28,22 +27,18 @@ public class ListenerService {
             byte[] operationId,
             S service,
             String successfulTopic,
-            String failTopic) {
+            String failTopic,
+            Class<T> dtoClazz) {
 
         String operationIdEncoded = new String(operationId);
-        Class<T> actualTypeArgument = (Class<T>) ((ParameterizedType) service.getClass()
-                .getGenericSuperclass())
-                .getActualTypeArguments()[1];
-
-        String dtoName = actualTypeArgument
-                .getSimpleName()
+        String dtoName = dtoClazz.getSimpleName()
                 .toLowerCase()
                 .replace("dto", "");
 
         logger.info("Saving {} {} with operationId: {}", dtoName, itemJson, operationIdEncoded);
 
         try {
-            T saved = (T) service.add(objectMapper.readValue(itemJson, actualTypeArgument));
+            T saved = (T) service.add(objectMapper.readValue(itemJson, dtoClazz));
             kafkaService.sendMessageWithEntity(saved,
                     successfulTopic,
                     Collections.singletonMap(OPERATION_ID_HEADER, operationId));

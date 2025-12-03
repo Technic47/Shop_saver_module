@@ -6,6 +6,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 import ru.kuznetsov.shop.data.service.AddressService;
 import ru.kuznetsov.shop.module.saver.service.ListenerService;
+import ru.kuznetsov.shop.represent.dto.AddressDto;
 
 import static ru.kuznetsov.shop.represent.common.KafkaConst.*;
 
@@ -24,6 +25,7 @@ public class AddressListener {
                 operationId,
                 addressService,
                 ADDRESS_SAVE_SUCCESSFUL_TOPIC,
-                ADDRESS_SAVE_FAIL_TOPIC);
+                ADDRESS_SAVE_FAIL_TOPIC,
+                AddressDto.class);
     }
 }

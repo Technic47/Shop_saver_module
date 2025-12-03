@@ -6,6 +6,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 import ru.kuznetsov.shop.data.service.ProductService;
 import ru.kuznetsov.shop.module.saver.service.ListenerService;
+import ru.kuznetsov.shop.represent.dto.ProductDto;
 
 import static ru.kuznetsov.shop.represent.common.KafkaConst.*;
 
@@ -24,6 +25,7 @@ public class ProductListener {
                 operationId,
                 productService,
                 PRODUCT_SAVE_SUCCESSFUL_TOPIC,
-                PRODUCT_SAVE_FAIL_TOPIC);
+                PRODUCT_SAVE_FAIL_TOPIC,
+                ProductDto.class);
     }
 }
