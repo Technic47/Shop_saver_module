@@ -13,12 +13,10 @@ import ru.kuznetsov.shop.represent.dto.StockDto;
 import ru.kuznetsov.shop.represent.dto.order.BucketItemDto;
 import ru.kuznetsov.shop.represent.dto.order.OrderDto;
 import ru.kuznetsov.shop.represent.dto.order.OrderStatusDto;
+import ru.kuznetsov.shop.represent.dto.order.SellerNotificationDto;
 import ru.kuznetsov.shop.represent.enums.OrderStatusType;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static ru.kuznetsov.shop.represent.common.KafkaConst.*;
 import static ru.kuznetsov.shop.represent.enums.OrderStatusType.CREATED;
@@ -57,6 +55,7 @@ public class OrderListener {
             processBucketItems(bucket, savedOrder.getId(), customerId);
             processStock(bucket, null, customerId);
             processOrderStatus(orderId, CREATED);
+            notifySellers(bucket);
 
             kafkaService.sendMessageWithEntity(savedOrder,
                     ORDER_SAVE_SUCCESSFUL_TOPIC,
@@ -79,7 +78,7 @@ public class OrderListener {
             bucketItemDto.setOrderId(orderId);
             bucketItemDto.setCustomerId(customerId.toString());
 
-            if (bucketItemDto.getOwnerId() == null){
+            if (bucketItemDto.getOwnerId() == null) {
                 bucketItemDto.setOwnerId(productService.getOwner(bucketItemDto.getProductId()));
             }
 
@@ -123,5 +122,37 @@ public class OrderListener {
 
     private void processOrderStatus(Long orderId, OrderStatusType orderStatus) {
         orderStatusService.add(new OrderStatusDto(orderStatus, null, null, orderId));
+    }
+
+    private void notifySellers(Set<BucketItemDto> bucket) {
+        Map<String, SellerNotificationDto> sellerBucketMap = new HashMap<>();
+
+        for (BucketItemDto bucketItemDto : bucket) {
+            String ownerId = bucketItemDto.getOwnerId();
+
+            if (sellerBucketMap.containsKey(ownerId)) {
+                sellerBucketMap.get(ownerId).getProducts().add(bucketItemDto);
+            } else {
+                Set<BucketItemDto> sellerProducts = new HashSet<>();
+                sellerProducts.add(bucketItemDto);
+
+                sellerBucketMap.put(
+                        ownerId,
+                        new SellerNotificationDto(
+                                null,
+                                ownerId,
+                                bucketItemDto.getOrderId(),
+                                sellerProducts
+                        )
+                );
+            }
+
+            sellerBucketMap.values()
+                    .forEach(sellerBucket -> kafkaService.sendMessage(
+                            sellerBucket,
+                            OPERATION_ID_HEADER,
+                            Collections.emptyMap()
+                    ));
+        }
     }
 }
