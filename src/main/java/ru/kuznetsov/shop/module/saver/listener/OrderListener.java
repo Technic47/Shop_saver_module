@@ -32,6 +32,7 @@ public class OrderListener {
     private final OrderStatusService orderStatusService;
     private final BucketItemService bucketItemService;
     private final StockService stockService;
+    private final ProductService productService;
     private final KafkaService kafkaService;
     private final ObjectMapper objectMapper;
 
@@ -77,6 +78,10 @@ public class OrderListener {
         for (BucketItemDto bucketItemDto : bucket) {
             bucketItemDto.setOrderId(orderId);
             bucketItemDto.setCustomerId(customerId.toString());
+
+            if (bucketItemDto.getOwnerId() == null){
+                bucketItemDto.setOwnerId(productService.getOwner(bucketItemDto.getProductId()));
+            }
 
             bucketItemService.add(bucketItemDto);
         }
