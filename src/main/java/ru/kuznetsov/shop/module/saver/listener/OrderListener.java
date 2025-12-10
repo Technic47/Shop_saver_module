@@ -53,7 +53,7 @@ public class OrderListener {
             OrderDto savedOrder = orderService.add(orderDto);
             orderId = savedOrder.getId();
             processBucketItems(bucket, savedOrder.getId(), customerId);
-            processStock(bucket, null, customerId);
+            processStock(bucket, null, customerId, orderId);
             processOrderStatus(orderId, CREATED);
             notifySellers(bucket);
 
@@ -88,7 +88,7 @@ public class OrderListener {
         logger.info("Buckets for order {} and customer {} saved.", orderId, customerId);
     }
 
-    private void processStock(Set<BucketItemDto> bucket, Long storeId, UUID customerId) {
+    private void processStock(Set<BucketItemDto> bucket, Long storeId, UUID customerId, Long orderId) {
         for (BucketItemDto item : bucket) {
             Integer requestedAmount = item.getAmount();
             List<StockDto> allStock = stockService.findAllByOptionalParams(item.getProductId(), storeId, customerId);
@@ -98,6 +98,7 @@ public class OrderListener {
 
                 if (requestedAmount >= stockAmount) {
                     stockDto.setIsReserved(true);
+                    stockDto.setReservationOrderId(orderId);
                     stockService.update(stockDto);
 
                     if (requestedAmount.equals(stockAmount)) break;
@@ -109,7 +110,8 @@ public class OrderListener {
                             stockDto.getProductName(),
                             stockDto.getStore(),
                             stockDto.getStoreAddress(),
-                            true));
+                            true,
+                            orderId));
 
                     stockDto.setAmount(stockAmount - requestedAmount);
                     stockService.update(stockDto);
