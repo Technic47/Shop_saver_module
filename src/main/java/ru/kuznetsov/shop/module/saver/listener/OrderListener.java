@@ -120,10 +120,14 @@ public class OrderListener {
                 }
             }
         }
+
+        logger.info("Stocks for order {} and customer {} processed.", orderId, customerId);
     }
 
     private void processOrderStatus(Long orderId, OrderStatusType orderStatus) {
         orderStatusService.add(new OrderStatusDto(orderStatus, null, null, orderId));
+
+        logger.info("Order status for order {} processed.", orderId);
     }
 
     private void notifySellers(Set<BucketItemDto> bucket) {
@@ -152,9 +156,11 @@ public class OrderListener {
             sellerBucketMap.values()
                     .forEach(sellerBucket -> kafkaService.sendMessage(
                             sellerBucket,
-                            OPERATION_ID_HEADER,
+                            SELLER_NOTIFICATION_TOPIC,
                             Collections.emptyMap()
                     ));
         }
+
+        logger.info("Sellers notified");
     }
 }
