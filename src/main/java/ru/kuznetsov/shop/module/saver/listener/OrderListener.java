@@ -89,22 +89,39 @@ public class OrderListener {
     }
 
     private void processStock(Set<BucketItemDto> bucket, Long storeId, UUID customerId, Long orderId) {
+        logger.info("Processing stock for order {} and customer {}.", orderId, customerId);
         for (BucketItemDto item : bucket) {
             Integer requestedAmount = item.getAmount();
-            List<StockDto> allStock = stockService.findAllByOptionalParams(item.getProductId(), storeId, customerId);
+            List<StockDto> allStock = stockService.findAllByOptionalParams(item.getProductId(), storeId, UUID.fromString(item.getOwnerId()))
+                    .stream()
+                    .filter(stock -> stock.getIsReserved().equals(false))
+                    .toList();
+
+            logger.debug("Stock amount for productId: {} is {}. Requested amount: {}", item.getProductId(), allStock.stream().mapToInt(StockDto::getAmount).sum(), requestedAmount);
 
             for (StockDto stockDto : allStock) {
+                logger.debug("StockDto:  id - {}, amount - {}", stockDto.getId(), stockDto.getAmount());
                 Integer stockAmount = stockDto.getAmount();
 
                 if (requestedAmount >= stockAmount) {
+                    logger.debug("RequestedAmount >= stockAmount. Update to reserved.");
+
                     stockDto.setIsReserved(true);
                     stockDto.setReservationOrderId(orderId);
                     stockService.update(stockDto);
 
-                    if (requestedAmount.equals(stockAmount)) break;
+                    if (requestedAmount.equals(stockAmount)) {
+                        logger.debug("RequestedAmount equals stock amount {} - {}. Break stock processing", requestedAmount, stockAmount);
+                        break;
+                    }
 
                     requestedAmount -= stockAmount;
+
+                    logger.debug("RequestedAmount remains: {}", requestedAmount);
                 } else {
+                    logger.debug("RequestedAmount < stockAmount. Split stock.");
+
+                    logger.debug("Creating new stock for productId: {} with amount: {}", item.getProductId(), requestedAmount);
                     stockService.add(new StockDto(requestedAmount,
                             stockDto.getProductId(),
                             stockDto.getProductName(),
@@ -114,6 +131,7 @@ public class OrderListener {
                             orderId));
 
                     stockDto.setAmount(stockAmount - requestedAmount);
+                    logger.debug("Updating stock with id: {} with amount: {}", stockDto.getId(), stockDto.getAmount());
                     stockService.update(stockDto);
 
                     break;
