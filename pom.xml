@@ -6,11 +6,11 @@
     <parent>
         <groupId>io.github.technic47</groupId>
         <artifactId>shop-spring-boot-starter</artifactId>
-        <version>1.0.29</version>
+        <version>1.0.30</version>
     </parent>
 
     <artifactId>saver</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <name>saver</name>
     <description>saver</description>
 
@@ -31,6 +31,11 @@
             <groupId>io.github.technic47</groupId>
             <artifactId>data-model</artifactId>
             <version>${data-model.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.technic47</groupId>
+            <artifactId>kafka-service</artifactId>
+            <version>${kafka-service.version}</version>
         </dependency>
 
         <dependency>

@@ -9,6 +9,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 import ru.kuznetsov.shop.data.service.*;
+import ru.kuznetsov.shop.kafka.service.KafkaService;
 import ru.kuznetsov.shop.represent.dto.StockDto;
 import ru.kuznetsov.shop.represent.dto.order.BucketItemDto;
 import ru.kuznetsov.shop.represent.dto.order.OrderDto;
