@@ -9,8 +9,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import ru.kuznetsov.shop.data.service.KafkaService;
 import ru.kuznetsov.shop.data.service.ProductService;
+import ru.kuznetsov.shop.kafka.service.KafkaService;
 import ru.kuznetsov.shop.represent.dto.ProductDto;
 
 import java.util.Map;

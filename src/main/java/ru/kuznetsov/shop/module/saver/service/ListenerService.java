@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.kuznetsov.shop.data.service.AbstractService;
-import ru.kuznetsov.shop.data.service.KafkaService;
+import ru.kuznetsov.shop.kafka.service.KafkaService;
 import ru.kuznetsov.shop.represent.dto.AbstractDto;
 
 import java.util.Collections;

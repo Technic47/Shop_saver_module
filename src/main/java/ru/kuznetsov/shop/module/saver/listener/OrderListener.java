@@ -39,7 +39,7 @@ public class OrderListener {
 
     @Transactional
     @KafkaListener(topics = ORDER_SAVE_TOPIC, groupId = "${spring.kafka.consumer.group-id}")
-    public void saveProduct(String orderDtoJson, @Header(OPERATION_ID_HEADER) byte[] operationId) {
+    public void saveOrder(String orderDtoJson, @Header(OPERATION_ID_HEADER) byte[] operationId) {
 
         String operationIdEncoded = new String(operationId);
         Long orderId = null;
