@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.kuznetsov.shop.data.service.AbstractService;
 import ru.kuznetsov.shop.kafka.service.KafkaService;
+import ru.kuznetsov.shop.kafka.service.MessageCacheService;
 import ru.kuznetsov.shop.represent.dto.AbstractDto;
 
 import java.util.Collections;
@@ -19,6 +20,7 @@ public class ListenerService {
 
     private final KafkaService kafkaService;
     private final ObjectMapper objectMapper;
+    private final MessageCacheService<AbstractDto> messageCache;
 
     Logger logger = LoggerFactory.getLogger(ListenerService.class);
 
@@ -38,12 +40,20 @@ public class ListenerService {
         logger.info("Saving {} {} with operationId: {}", dtoName, itemJson, operationIdEncoded);
 
         try {
-            T saved = (T) service.add(objectMapper.readValue(itemJson, dtoClazz));
-            kafkaService.sendMessageWithEntity(saved,
-                    successfulTopic,
-                    Collections.singletonMap(OPERATION_ID_HEADER, operationId));
+            T item = objectMapper.readValue(itemJson, dtoClazz);
 
-            logger.info("Item {} saved. Id: {}, operationId: {}", dtoName, saved.getId(), operationIdEncoded);
+            if (!messageCache.exists(item)) {
+                messageCache.put(item);
+
+                T saved = (T) service.add(item);
+                Long entityId = saved.getId();
+
+                kafkaService.sendMessageWithEntity(saved,
+                        successfulTopic,
+                        Collections.singletonMap(OPERATION_ID_HEADER, operationId));
+
+                logger.info("Item {} saved. Id: {}, operationId: {}", dtoName, entityId, operationIdEncoded);
+            }
         } catch (Exception e) {
             kafkaService.sendMessage(itemJson,
                     failTopic,
