@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import ru.kuznetsov.shop.data.service.ProductService;
 import ru.kuznetsov.shop.kafka.service.KafkaService;
+import ru.kuznetsov.shop.kafka.service.MessageCacheService;
 import ru.kuznetsov.shop.represent.dto.ProductDto;
 
 import java.util.Map;
@@ -37,7 +38,7 @@ class ListenerServiceTest {
 
     @BeforeEach
     void setUp() {
-        listenerService = new ListenerService(kafkaService, om);
+        listenerService = new ListenerService(kafkaService, om, new MessageCacheService<>());
     }
 
     @Test
