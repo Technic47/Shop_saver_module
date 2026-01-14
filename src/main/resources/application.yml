@@ -1,26 +1,5 @@
 spring:
   application:
-    name: Shop_saver_module
-
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: ${DB_URL}
-    username: ${DB_USER}
-    password: ${DB_PASS}
-  jpa:
-    generate-ddl: true
-    open-in-view: false
-
-  kafka:
-    bootstrap-servers: ${KAFKA_URL}
-    consumer:
-      auto-offset-reset: earliest
-      group-id: ${MODULE_GROUP_ID}
-
-  cache:
-    type: redis
-
-  data:
-    redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
+    name: saver
+  config:
+    import: optional:configserver:${CONFIG_SERVER_URL}
