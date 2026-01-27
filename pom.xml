@@ -6,11 +6,11 @@
     <parent>
         <groupId>io.github.technic47</groupId>
         <artifactId>shop-spring-boot-starter</artifactId>
-        <version>1.0.33</version>
+        <version>1.1.1</version>
     </parent>
 
     <artifactId>saver</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <name>saver</name>
     <description>saver</description>
 

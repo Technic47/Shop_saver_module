@@ -71,6 +71,7 @@ public class OrderListener {
                     Collections.singletonMap(OPERATION_ID_HEADER, operationId));
 
             logger.error("Order saving failed. OperationId: {}, order: {}, ", operationIdEncoded, orderDtoJson);
+            logger.error(e.getMessage());
         }
     }
 
